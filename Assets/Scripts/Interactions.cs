@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class muckFalik : MonoBehaviour
+public class Interactions : MonoBehaviour
 {
 
     public GameObject astroButton;
