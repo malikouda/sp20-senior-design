@@ -205,9 +205,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Testies
-
-    Rocket'
+  m_Text: Rocket
 --- !u!222 &23463929
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -300,9 +298,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Testies
-
-    Console'
+  m_Text: Console
 --- !u!222 &231237692
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1255,7 +1251,7 @@ GameObject:
   - component: {fileID: 1189239939}
   - component: {fileID: 1189239941}
   m_Layer: 0
-  m_Name: RedRocket
+  m_Name: Rocket
   m_TagString: rocketPanel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1594,9 +1590,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Testies
-
-    Astro'
+  m_Text: Astro
 --- !u!222 &1704582421
 CanvasRenderer:
   m_ObjectHideFlags: 0
