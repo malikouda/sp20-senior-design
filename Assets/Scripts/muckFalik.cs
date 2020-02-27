@@ -8,11 +8,14 @@ public class muckFalik : MonoBehaviour
     public GameObject astroButton;
     public GameObject rocketButton;
     public GameObject consoleButton;
+    Animator anim;
 
+    private bool facingRight;
     // Start is called before the first frame update
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        facingRight = true;
     }
 
     // Update is called once per frame
@@ -20,12 +23,21 @@ public class muckFalik : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftArrow)) // checks if player presses left arrow key
         {
-            transform.Translate(-8 * Time.deltaTime, 0, 0); // moves player to the left
+            transform.Translate(-4 * Time.deltaTime, 0, 0); // moves player to the left
+            anim.SetBool("isWalking", true);    
         }
-        if (Input.GetKey(KeyCode.RightArrow)) // checks if oplayer presses right arrow key
+        else if (Input.GetKey(KeyCode.RightArrow)) // checks if oplayer presses right arrow key
         {
-            transform.Translate(8 * Time.deltaTime, 0, 0); // moves player to the right
+            transform.Translate(4 * Time.deltaTime, 0, 0); // moves player to the right
+            anim.SetBool("isWalking", true);
         }
+        else
+        {
+            anim.SetBool("isWalking", false);
+            //anim.SetBool("idle", true);
+        }
+        float horizontal = Input.GetAxis("Horizontal");
+        Flip(horizontal);
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
@@ -70,5 +82,15 @@ public class muckFalik : MonoBehaviour
 
     public void WiringButton(){
         Debug.Log("Consolewiring");
+    }
+
+    private void Flip(float horizontal){
+        if (horizontal > 0 && !facingRight || horizontal < 0 && facingRight){
+            facingRight = !facingRight;
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+
+        }
     }
 }
