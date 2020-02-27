@@ -11,6 +11,8 @@ public class Player : MonoBehaviour {
     private float jumpVelocity;
     private Vector2 velocity;
     private float velocityXSmoothing;
+    private Animator anim;
+    private float scaleX;
 
     #endregion
 
@@ -40,6 +42,10 @@ public class Player : MonoBehaviour {
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity * timeToJumpApex);
+
+        anim = GetComponent<Animator>();
+        scaleX = transform.localScale.x;
+
     }
 
     private void Update() {
@@ -56,6 +62,16 @@ public class Player : MonoBehaviour {
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        Debug.Log(velocity.x);
+
+        if (input.x != 0) {
+            Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
+            transform.localScale = newScale;
+            anim.SetBool("isWalking", true);
+        } else {
+            anim.SetBool("isWalking", false);
+        }
     }
 
 }
