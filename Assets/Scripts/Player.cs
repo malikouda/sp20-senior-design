@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour {
@@ -13,6 +14,7 @@ public class Player : MonoBehaviour {
     private float velocityXSmoothing;
     private Animator anim;
     private float scaleX;
+    private bool sprinting = false;
 
     #endregion
 
@@ -24,6 +26,7 @@ public class Player : MonoBehaviour {
     public float timeToJumpApex = .4f;
     [Range(2, 15)]
     public float moveSpeed = 6;
+    public float sprintSpeed = 1;
     [Range(0f, 0.5f)]
     public float accelerationTimeAirborne = .2f;
     [Range(0f, 0.5f)]
@@ -58,20 +61,40 @@ public class Player : MonoBehaviour {
             velocity.y = jumpVelocity;
         }
 
-        float targetVelocityX = input.x * moveSpeed;
+        float sprintModifier;
+
+        if (Input.GetKeyDown(KeyCode.Q) && controller.collisions.below && velocity.y == 0 && !sprinting) {
+            sprintModifier = sprintSpeed;
+            sprinting = true;
+            Debug.Log("VELOCITY: " + velocity.x);
+            Debug.Log("SPRINT SPEED: " + sprintModifier);
+            Debug.Log("INPUT SPEED: " + input.x);
+            StartCoroutine(SprintCooldown());
+
+        } else {
+            sprintModifier = 0;
+        }
+
+
+        float targetVelocityX = sprintModifier == 0 ? input.x * moveSpeed : input.x * moveSpeed * sprintModifier;
+
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        Debug.Log(velocity.x);
-
-        if (input.x != 0) {
+        if (input.x != 0 && controller.collisions.below) {
             Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
             transform.localScale = newScale;
+            anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
             anim.SetBool("isWalking", true);
         } else {
             anim.SetBool("isWalking", false);
         }
+    }
+
+    IEnumerator SprintCooldown() {
+        yield return new WaitForSeconds(.5f);
+        sprinting = false;
     }
 
 }

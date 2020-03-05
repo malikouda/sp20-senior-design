@@ -1922,6 +1922,7 @@ MonoBehaviour:
   jumpHeight: 2
   timeToJumpApex: 0.4
   moveSpeed: 4
+  sprintSpeed: 50
   accelerationTimeAirborne: 0.2
   accelerationTimeGrounded: 0.1
 --- !u!114 &6339013751660470967
