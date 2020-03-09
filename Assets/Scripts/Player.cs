@@ -67,11 +67,15 @@ public class Player : MonoBehaviour {
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
 
-        if (input.x != 0 && controller.collisions.below) {
+        if (input.x != 0) {
             Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
             transform.localScale = newScale;
-            anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
-            anim.SetBool("isWalking", true);
+
+            if (controller.collisions.below) {
+
+                anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
+                anim.SetBool("isWalking", true);
+            }
         } else {
             anim.SetBool("isWalking", false);
         }
