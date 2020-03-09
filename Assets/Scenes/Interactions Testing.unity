@@ -1396,8 +1396,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189239938}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.7, y: -0.35000002, z: 0}
-  m_LocalScale: {x: 13.789402, y: 14.912145, z: 0.75757}
+  m_LocalPosition: {x: 4.85, y: 2.56, z: 0}
+  m_LocalScale: {x: 34.280453, y: 32.74707, z: 0.75757}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -1922,7 +1922,6 @@ MonoBehaviour:
   jumpHeight: 2
   timeToJumpApex: 0.4
   moveSpeed: 4
-  sprintSpeed: 50
   accelerationTimeAirborne: 0.2
   accelerationTimeGrounded: 0.1
 --- !u!114 &6339013751660470967
