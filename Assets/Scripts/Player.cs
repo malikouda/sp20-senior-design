@@ -68,7 +68,7 @@ public class Player : MonoBehaviour {
         }
 
         if (teleportedA) {
-            transform.position = new Vector2(portalB.transform.position.x - 1f, portalB.transform.position.y);
+            transform.position = portalB.transform.position;
             teleportedA = false;
 
             if (!controller.collisions.below) {
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour {
         }
 
         if (teleportedB) {
-            transform.position = new Vector2(portalA.transform.position.x + 1f, portalA.transform.position.y);
+            transform.position = portalA.transform.position;
             teleportedB = false;
 
             if (!controller.collisions.below) {
