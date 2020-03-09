@@ -14,6 +14,10 @@ public class Player : MonoBehaviour {
     private float velocityXSmoothing;
     private Animator anim;
     private float scaleX;
+    private bool teleportedA;
+    private bool teleportedB;
+    private bool inA;
+    private bool inB;
 
     #endregion
 
@@ -29,6 +33,8 @@ public class Player : MonoBehaviour {
     public float accelerationTimeAirborne = .2f;
     [Range(0f, 0.5f)]
     public float accelerationTimeGrounded = .1f;
+    public GameObject portalA;
+    public GameObject portalB;
 
     #endregion
 
@@ -61,6 +67,24 @@ public class Player : MonoBehaviour {
             anim.SetBool("isJumping", true);
         }
 
+        if (teleportedA) {
+            transform.position = new Vector2(portalB.transform.position.x - 1f, portalB.transform.position.y);
+            teleportedA = false;
+
+            if (!controller.collisions.below) {
+                velocity.y *= -1;
+            }
+        }
+
+        if (teleportedB) {
+            transform.position = new Vector2(portalA.transform.position.x + 1f, portalA.transform.position.y);
+            teleportedB = false;
+
+            if (!controller.collisions.below) {
+                velocity.y *= -1;
+            }
+        }
+
         float targetVelocityX = input.x * moveSpeed;
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
@@ -72,12 +96,33 @@ public class Player : MonoBehaviour {
             transform.localScale = newScale;
 
             if (controller.collisions.below) {
-
                 anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
                 anim.SetBool("isWalking", true);
             }
         } else {
             anim.SetBool("isWalking", false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (collision.tag == "portal") {
+            if (collision.gameObject == portalA && !inA) {
+                teleportedA = true;
+                inB = true;
+            } else if (collision.gameObject == portalB && !inB) {
+                teleportedB = true;
+                inA = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision) {
+        if (collision.tag == "portal") {
+            if (collision.gameObject == portalA) {
+                inA = false;
+            } else if (collision.gameObject == portalB) {
+                inB = false;
+            }
         }
     }
 
