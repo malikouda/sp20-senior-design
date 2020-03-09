@@ -14,7 +14,6 @@ public class Player : MonoBehaviour {
     private float velocityXSmoothing;
     private Animator anim;
     private float scaleX;
-    private bool sprinting = false;
 
     #endregion
 
@@ -26,7 +25,6 @@ public class Player : MonoBehaviour {
     public float timeToJumpApex = .4f;
     [Range(2, 15)]
     public float moveSpeed = 6;
-    public float sprintSpeed = 1;
     [Range(0f, 0.5f)]
     public float accelerationTimeAirborne = .2f;
     [Range(0f, 0.5f)]
@@ -55,28 +53,15 @@ public class Player : MonoBehaviour {
 
         if (controller.collisions.above || controller.collisions.below) {
             velocity.y = 0;
+            anim.SetBool("isJumping", false);
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
             velocity.y = jumpVelocity;
+            anim.SetBool("isJumping", true);
         }
 
-        float sprintModifier;
-
-        if (Input.GetKeyDown(KeyCode.Q) && controller.collisions.below && velocity.y == 0 && !sprinting) {
-            sprintModifier = sprintSpeed;
-            sprinting = true;
-            Debug.Log("VELOCITY: " + velocity.x);
-            Debug.Log("SPRINT SPEED: " + sprintModifier);
-            Debug.Log("INPUT SPEED: " + input.x);
-            StartCoroutine(SprintCooldown());
-
-        } else {
-            sprintModifier = 0;
-        }
-
-
-        float targetVelocityX = sprintModifier == 0 ? input.x * moveSpeed : input.x * moveSpeed * sprintModifier;
+        float targetVelocityX = input.x * moveSpeed;
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
@@ -90,11 +75,6 @@ public class Player : MonoBehaviour {
         } else {
             anim.SetBool("isWalking", false);
         }
-    }
-
-    IEnumerator SprintCooldown() {
-        yield return new WaitForSeconds(.5f);
-        sprinting = false;
     }
 
 }
