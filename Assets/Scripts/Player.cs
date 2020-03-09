@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(Controller2D))]
 public class Player : MonoBehaviour {
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour {
     public float accelerationTimeGrounded = .1f;
     public GameObject portalA;
     public GameObject portalB;
+    public LayerMask collisionMask;
 
     #endregion
 
