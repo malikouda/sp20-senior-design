@@ -77,7 +77,7 @@ public class Player : MonoBehaviour {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
         if (hit) {
             if ((hit.normal == Vector2.up || hit.normal == Vector2.down)) {
-                lr.startColor = lr.endColor = Color.green;
+                lr.startColor = lr.endColor = shotA? Color.red : Color.green;
                 lr.SetPosition(0, pos);
                 lr.SetPosition(1, hit.point);
 
@@ -92,13 +92,13 @@ public class Player : MonoBehaviour {
                     portalsActive = true;
                 }
             } else {
-                lr.startColor = lr.endColor = Color.red;
+                lr.startColor = lr.endColor = Color.white;
                 lr.SetPosition(0, pos);
                 lr.SetPosition(1, hit.point);
             }
 
         } else {
-            lr.startColor = lr.endColor = Color.red;
+            lr.startColor = lr.endColor = Color.white;
             lr.SetPosition(0, pos);
             lr.SetPosition(1, ((mousePosition - pos).normalized * 5f) + pos);
         }
