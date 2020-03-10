@@ -129,10 +129,6 @@ public class Player : MonoBehaviour {
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
-
-        if (teleportedA || teleportedB) {
-            velocity += velocity;
-        }
         controller.Move(velocity * Time.deltaTime);
 
         if (input.x != 0) {
