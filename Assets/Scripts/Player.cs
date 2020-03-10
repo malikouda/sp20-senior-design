@@ -103,6 +103,15 @@ public class Player : MonoBehaviour {
             lr.SetPosition(1, ((mousePosition - pos).normalized * 5f) + pos);
         }
 
+        if (Input.GetKeyDown(KeyCode.R)) {
+            portalA.SetActive(false);
+            portalB.SetActive(false);
+            shotA = false;
+            portalsActive = false;
+            inA = false;
+            inB = false;
+        }
+
         if (controller.collisions.above || controller.collisions.below) {
             velocity.y = 0;
             anim.SetBool("isJumping", false);
