@@ -3,6 +3,8 @@ using System.Collections;
 using System;
 
 [RequireComponent(typeof(Controller2D))]
+[RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
     #region private
@@ -19,6 +21,9 @@ public class Player : MonoBehaviour {
     private bool teleportedB;
     private bool inA;
     private bool inB;
+    private bool shotA = false;
+    private bool portalsActive = false;
+    private LineRenderer lr;
 
     #endregion
 
@@ -37,6 +42,7 @@ public class Player : MonoBehaviour {
     public GameObject portalA;
     public GameObject portalB;
     public LayerMask collisionMask;
+    public Material lineMaterial;
 
     #endregion
 
@@ -48,6 +54,9 @@ public class Player : MonoBehaviour {
 
     private void Start() {
         controller = GetComponent<Controller2D>();
+        lr = GetComponent<LineRenderer>();
+        lr.material = lineMaterial;
+        lr.startWidth = 0.05f;
 
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity * timeToJumpApex);
@@ -55,9 +64,44 @@ public class Player : MonoBehaviour {
         anim = GetComponent<Animator>();
         scaleX = transform.localScale.x;
 
+        portalA = Instantiate(portalA);
+        portalB = Instantiate(portalB);
+        portalA.SetActive(false);
+        portalB.SetActive(false);
     }
 
     private void Update() {
+
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
+        if (hit) {
+            if ((hit.normal == Vector2.up || hit.normal == Vector2.down)) {
+                lr.startColor = lr.endColor = Color.green;
+                lr.SetPosition(0, pos);
+                lr.SetPosition(1, hit.point);
+
+                if (Input.GetMouseButtonDown(0) && !shotA) {
+                    portalA.transform.position = hit.point + hit.normal * .5f;
+                    portalA.SetActive(true);
+                    shotA = true;
+                } else if (Input.GetMouseButtonDown(0) && shotA) {
+                    portalB.transform.position = hit.point + hit.normal * .5f;
+                    portalB.SetActive(true);
+                    shotA = false;
+                    portalsActive = true;
+                }
+            } else {
+                lr.startColor = lr.endColor = Color.red;
+                lr.SetPosition(0, pos);
+                lr.SetPosition(1, hit.point);
+            }
+
+        } else {
+            lr.startColor = lr.endColor = Color.red;
+            lr.SetPosition(0, pos);
+            lr.SetPosition(1, ((mousePosition - pos).normalized * 5f) + pos);
+        }
 
         if (controller.collisions.above || controller.collisions.below) {
             velocity.y = 0;
@@ -72,25 +116,23 @@ public class Player : MonoBehaviour {
         if (teleportedA) {
             transform.position = portalB.transform.position;
             teleportedA = false;
-
-            if (!controller.collisions.below) {
-                velocity.y *= -1;
-            }
+            velocity.y *= -1;
         }
 
         if (teleportedB) {
             transform.position = portalA.transform.position;
             teleportedB = false;
-
-            if (!controller.collisions.below) {
-                velocity.y *= -1;
-            }
+            velocity.y *= -1;
         }
 
         float targetVelocityX = input.x * moveSpeed;
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
+
+        if (teleportedA || teleportedB) {
+            velocity += velocity;
+        }
         controller.Move(velocity * Time.deltaTime);
 
         if (input.x != 0) {
@@ -108,10 +150,10 @@ public class Player : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (collision.tag == "portal") {
-            if (collision.gameObject == portalA && !inA) {
+            if (collision.gameObject == portalA && !inA && portalsActive) {
                 teleportedA = true;
                 inB = true;
-            } else if (collision.gameObject == portalB && !inB) {
+            } else if (collision.gameObject == portalB && !inB && portalsActive) {
                 teleportedB = true;
                 inA = true;
             }
