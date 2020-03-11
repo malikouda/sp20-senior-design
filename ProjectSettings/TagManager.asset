@@ -8,6 +8,8 @@ TagManager:
   - rocketPanel
   - consoleWiring
   - portal
+  - changeCamera
+  - Inactive
   layers:
   - Default
   - TransparentFX

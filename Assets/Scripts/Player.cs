@@ -43,6 +43,7 @@ public class Player : MonoBehaviour {
     public GameObject portalB;
     public LayerMask collisionMask;
     public Material lineMaterial;
+    public CameraManager cameraManager;
 
     #endregion
 
@@ -162,6 +163,11 @@ public class Player : MonoBehaviour {
                 teleportedB = true;
                 inA = true;
             }
+        }
+
+        if (collision.tag == "changeCamera") {
+            cameraManager.newPos = collision.gameObject.transform.position;
+            cameraManager.transition = true;
         }
     }
 
