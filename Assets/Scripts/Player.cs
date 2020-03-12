@@ -78,7 +78,7 @@ public class Player : MonoBehaviour {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
         if (hit) {
             if ((hit.normal == Vector2.up || hit.normal == Vector2.down)) {
-                lr.startColor = lr.endColor = shotA? Color.red : Color.green;
+                lr.startColor = lr.endColor = shotA? Color.blue : Color.yellow;
                 lr.SetPosition(0, pos);
                 lr.SetPosition(1, hit.point);
 
@@ -86,11 +86,13 @@ public class Player : MonoBehaviour {
                     portalA.transform.position = hit.point + hit.normal * .5f;
                     portalA.SetActive(true);
                     shotA = true;
+                    Instantiate(Resources.Load("Portal1Sound"), transform.position, transform.rotation);
                 } else if (Input.GetMouseButtonDown(0) && shotA) {
                     portalB.transform.position = hit.point + hit.normal * .5f;
                     portalB.SetActive(true);
                     shotA = false;
                     portalsActive = true;
+                    Instantiate(Resources.Load("Portal2Sound"), transform.position, transform.rotation);
                 }
             } else {
                 lr.startColor = lr.endColor = Color.white;
@@ -121,6 +123,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
             velocity.y = jumpVelocity;
             anim.SetBool("isJumping", true);
+            Instantiate(Resources.Load("JumpSound"), transform.position, transform.rotation);
         }
 
         if (teleportedA) {
