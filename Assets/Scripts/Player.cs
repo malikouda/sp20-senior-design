@@ -7,8 +7,6 @@ using System;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
-    #region private
-
     private Controller2D controller;
 
     private float gravity;
@@ -25,10 +23,6 @@ public class Player : MonoBehaviour {
     private bool portalsActive = false;
     private LineRenderer lr;
 
-    #endregion
-
-    #region public
-
     [Range(1, 10)]
     public float jumpHeight = 4;
     [Range(0.1f, 2f)]
@@ -43,11 +37,9 @@ public class Player : MonoBehaviour {
     public GameObject portalB;
     public LayerMask collisionMask;
     public Material lineMaterial;
-    public CameraManager cameraManager;
 
-    #endregion
-
-    private Vector2 input {
+    [HideInInspector]
+    public Vector2 input {
         get {
             return new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         }
@@ -166,11 +158,6 @@ public class Player : MonoBehaviour {
                 teleportedB = true;
                 inA = true;
             }
-        }
-
-        if (collision.tag == "changeCamera") {
-            cameraManager.newPos = collision.gameObject.transform.position;
-            cameraManager.transition = true;
         }
     }
 
