@@ -105,6 +105,7 @@ public class Player : MonoBehaviour {
             portalsActive = false;
             inA = false;
             inB = false;
+            Instantiate(Resources.Load("PortalReset"), transform.position, transform.rotation);
         }
 
         if (controller.collisions.above || controller.collisions.below) {
