@@ -641,8 +641,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 951067726}
   player: {fileID: 951067725}
-  focusAreaSize: {x: 3, y: 3}
-  verticalOffset: 0
+  focusAreaSize: {x: 2, y: 2}
+  verticalOffset: -0.5
   lookAheadDstX: 2
   lookSmoothTimeX: 0.5
   verticalSmoothTime: 0.1
