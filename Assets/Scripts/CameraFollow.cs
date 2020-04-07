@@ -11,27 +11,20 @@ public class CameraFollow : MonoBehaviour {
     public float verticalSmoothTime;
 
     private FocusArea focusArea;
-    private float currentLookAheadX;
-    private float targetLookAheadX;
-    private float lookAheadDirX;
     private float smoothLookVelocityX;
     private float smoothLookVelocityY;
-    private bool lookAheadStopped;
-    private Bounds oldBounds;
-    private Bounds newBounds;
 
     private void Start() {
         focusArea = new FocusArea(target.GetComponent<Collider2D>().bounds, focusAreaSize);
-        oldBounds = target.GetComponent<Collider2D>().bounds;
     }
 
-    private void Update() {
+    private void LateUpdate() {
         focusArea.Update(target.GetComponent<Collider2D>().bounds);
 
         Vector2 focusPosition = focusArea.center + Vector2.up * verticalOffset;
 
         focusPosition.y = Mathf.SmoothDamp(transform.position.y, focusPosition.y, ref smoothLookVelocityY, verticalSmoothTime);
-        focusPosition.x = Mathf.SmoothDamp(transform.position.x, focusPosition.x + currentLookAheadX, ref smoothLookVelocityX, verticalSmoothTime);
+        focusPosition.x = Mathf.SmoothDamp(transform.position.x, focusPosition.x, ref smoothLookVelocityX, verticalSmoothTime);
         transform.position = (Vector3)focusPosition + Vector3.forward * -10;
     }
 
