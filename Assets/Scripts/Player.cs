@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     private bool shotA = false;
     private bool portalsActive = false;
     private LineRenderer lr;
+    private GameManager gm;
 
     [Range(1, 10)]
     public float jumpHeight = 4;
@@ -61,6 +62,7 @@ public class Player : MonoBehaviour {
         portalB = Instantiate(portalB);
         portalA.SetActive(false);
         portalB.SetActive(false);
+        gm = FindObjectOfType<GameManager>();
     }
 
     private void Update() {
@@ -159,6 +161,14 @@ public class Player : MonoBehaviour {
                 teleportedB = true;
                 inA = true;
             }
+        }
+
+        if (collision.tag == "NextLevel") {
+            gm.NextLevel();
+        }
+
+        if (collision.tag == "ResetLevel") {
+            gm.ResetLevel();
         }
     }
 

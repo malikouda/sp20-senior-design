@@ -10,6 +10,8 @@ TagManager:
   - portal
   - changeCamera
   - Inactive
+  - NextLevel
+  - ResetLevel
   layers:
   - Default
   - TransparentFX
