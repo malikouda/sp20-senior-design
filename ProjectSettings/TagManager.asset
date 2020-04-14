@@ -12,6 +12,7 @@ TagManager:
   - Inactive
   - NextLevel
   - ResetLevel
+  - GameManager
   layers:
   - Default
   - TransparentFX

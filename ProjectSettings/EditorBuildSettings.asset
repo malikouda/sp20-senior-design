@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: bf62d057e2a2b4e5f8d67c40c78599cb
+  - enabled: 1
     path: Assets/Scenes/ScaffoldingJump.unity
     guid: 2259c1e45c3764aaa9777f03bce2503d
   - enabled: 1
