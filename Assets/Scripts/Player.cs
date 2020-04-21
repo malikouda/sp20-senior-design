@@ -38,6 +38,7 @@ public class Player : MonoBehaviour {
     public GameObject portalB;
     public LayerMask collisionMask;
     public Material lineMaterial;
+    public AudioClip[] sounds;
 
     [HideInInspector]
     public Vector2 input {
@@ -80,13 +81,13 @@ public class Player : MonoBehaviour {
                     portalA.transform.position = hit.point + hit.normal * .5f;
                     portalA.SetActive(true);
                     shotA = true;
-                    Instantiate(Resources.Load("Portal1Sound"), transform.position, transform.rotation);
+                    gm.PlaySound(sounds[1]);
                 } else if (Input.GetMouseButtonDown(0) && shotA) {
                     portalB.transform.position = hit.point + hit.normal * .5f;
                     portalB.SetActive(true);
                     shotA = false;
                     portalsActive = true;
-                    Instantiate(Resources.Load("Portal2Sound"), transform.position, transform.rotation);
+                    gm.PlaySound(sounds[2]);
                 }
             } else {
                 lr.startColor = lr.endColor = Color.white;
@@ -100,14 +101,14 @@ public class Player : MonoBehaviour {
             lr.SetPosition(1, ((mousePosition - pos).normalized * 5f) + pos);
         }
 
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.R) && (portalA.activeSelf || portalB.activeSelf)) {
             portalA.SetActive(false);
             portalB.SetActive(false);
             shotA = false;
             portalsActive = false;
             inA = false;
             inB = false;
-            Instantiate(Resources.Load("PortalReset"), transform.position, transform.rotation);
+            gm.PlaySound(sounds[3]);
         }
 
         if (controller.collisions.above || controller.collisions.below) {
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
             velocity.y = jumpVelocity;
             anim.SetBool("isJumping", true);
-            Instantiate(Resources.Load("JumpSound"), transform.position, transform.rotation);
+            gm.PlaySound(sounds[0]);
         }
 
         if (teleportedA) {
@@ -164,11 +165,21 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "NextLevel") {
-            gm.NextLevel();
+            gm.nextLevel = true;
         }
 
         if (collision.tag == "ResetLevel") {
-            gm.ResetLevel();
+            transform.position = gm.checkpoint.position;
+            portalA.SetActive(false);
+            portalB.SetActive(false);
+            shotA = false;
+            portalsActive = false;
+            inA = false;
+            inB = false;
+        }
+
+        if (collision.tag == "Checkpoint" || collision.tag == "Origin") {
+            gm.checkpoint = collision.transform;
         }
     }
 
