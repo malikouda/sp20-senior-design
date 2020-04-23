@@ -1920,7 +1920,7 @@ MonoBehaviour:
   checkpoint: {fileID: 0}
   next: 0
   levelMusic:
-  - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
+  - {fileID: 8300000, guid: 454662c3dd570402abad2312ce677f9f, type: 3}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
@@ -1931,7 +1931,6 @@ MonoBehaviour:
   anim: {fileID: 264449241}
   black: {fileID: 264449239}
   nextLevel: 0
-  optionsMenu: {fileID: 0}
 --- !u!4 &1307640082
 Transform:
   m_ObjectHideFlags: 0
