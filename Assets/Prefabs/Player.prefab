@@ -192,10 +192,10 @@ MonoBehaviour:
     m_Bits: 512
   lineMaterial: {fileID: 2100000, guid: f0065eaa3058fb44197168c11a68f441, type: 2}
   sounds:
-  - {fileID: 8300000, guid: 77092487572284b05b597d0fc22485fd, type: 3}
-  - {fileID: 8300000, guid: c47c662aa08aa4060bb6fc1db91e316f, type: 3}
-  - {fileID: 8300000, guid: e254dc1581aef4d09a01ee90a53c6786, type: 3}
-  - {fileID: 8300000, guid: 60ae64e8bc80149119b4d94abea3d428, type: 3}
+  - {fileID: 8300000, guid: d1ab3d2cbd6964844a5194461e574c9c, type: 3}
+  - {fileID: 8300000, guid: fa060643889c34d748f4598bc21a5c61, type: 3}
+  - {fileID: 8300000, guid: 3028b27b996514ddea300dc9c9fc00fb, type: 3}
+  - {fileID: 8300000, guid: 4ecf53ff4bee046c18e254cc9be4acef, type: 3}
 --- !u!50 &5955540838293966759
 Rigidbody2D:
   serializedVersion: 4
