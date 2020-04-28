@@ -23,7 +23,10 @@ public class Player : MonoBehaviour {
     private bool portalsActive = false;
     private LineRenderer lr;
     private GameManager gm;
+    private Vector2 normalA;
+    private Vector2 normalB;
 
+    public float maxVelocity = 30;
     [Range(1, 10)]
     public float jumpHeight = 4;
     [Range(0.1f, 2f)]
@@ -72,33 +75,35 @@ public class Player : MonoBehaviour {
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
         if (hit) {
-            if ((hit.normal == Vector2.up || hit.normal == Vector2.down)) {
-                lr.startColor = lr.endColor = shotA? Color.blue : Color.yellow;
-                lr.SetPosition(0, pos);
-                lr.SetPosition(1, hit.point);
+            lr.startColor = lr.endColor = shotA ? Color.blue : Color.yellow;
+            lr.startWidth = .03f;
+            lr.SetPosition(0, pos);
+            lr.SetPosition(1, hit.point);
 
-                if (Input.GetMouseButtonDown(0) && !shotA) {
-                    portalA.transform.position = hit.point + hit.normal * .5f;
-                    portalA.SetActive(true);
-                    shotA = true;
-                    gm.PlaySound(sounds[1]);
-                } else if (Input.GetMouseButtonDown(0) && shotA) {
-                    portalB.transform.position = hit.point + hit.normal * .5f;
-                    portalB.SetActive(true);
-                    shotA = false;
-                    portalsActive = true;
+            if (Input.GetMouseButtonDown(0) && !shotA) {
+                portalA.transform.position = hit.point + hit.normal * .75f;
+                portalA.SetActive(true);
+                normalA = hit.normal;
+                shotA = true;
+                if (gm) {
+                   gm.PlaySound(sounds[1]);
+                }
+                
+            } else if (Input.GetMouseButtonDown(0) && shotA) {
+                portalB.transform.position = hit.point + hit.normal * .75f;
+                portalB.SetActive(true);
+                normalB = hit.normal;
+                shotA = false;
+                portalsActive = true;
+                if (gm) {
                     gm.PlaySound(sounds[2]);
                 }
-            } else {
-                lr.startColor = lr.endColor = Color.white;
-                lr.SetPosition(0, pos);
-                lr.SetPosition(1, hit.point);
             }
 
         } else {
             lr.startColor = lr.endColor = Color.white;
             lr.SetPosition(0, pos);
-            lr.SetPosition(1, ((mousePosition - pos).normalized * 5f) + pos);
+            lr.SetPosition(1, ((mousePosition - pos).normalized * 5) + pos);
         }
 
         if (Input.GetKeyDown(KeyCode.R) && (portalA.activeSelf || portalB.activeSelf)) {
@@ -108,7 +113,9 @@ public class Player : MonoBehaviour {
             portalsActive = false;
             inA = false;
             inB = false;
-            gm.PlaySound(sounds[3]);
+            if (gm) {
+                gm.PlaySound(sounds[3]);
+            }
         }
 
         if (controller.collisions.above || controller.collisions.below) {
@@ -123,22 +130,38 @@ public class Player : MonoBehaviour {
         }
 
         if (teleportedA) {
+            print(normalB);
             transform.position = portalB.transform.position;
-            teleportedA = false;
-            velocity.y *= -1;
+            if (normalB.x == 0 && normalB.y != 0) {
+                velocity.y *= -normalB.y;
+            } else if (normalB.y == 0 && normalB.x != 0) {
+                velocity.x *= -normalB.x;
+            } else {
+                velocity *= -normalB;
+            }
         }
 
         if (teleportedB) {
+            print(normalA);
             transform.position = portalA.transform.position;
-            teleportedB = false;
-            velocity.y *= -1;
+            if (normalA.x == 0 && normalA.y != 0) {
+                velocity.y *= -normalA.y;
+            } else if (normalA.y == 0 && normalA.x != 0) {
+                velocity.x *= -normalA.x;
+            } else {
+                velocity *= -normalA;
+            }
         }
 
+        velocity = Vector2.ClampMagnitude(velocity, 25);
         float targetVelocityX = input.x * moveSpeed;
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        teleportedB = false;
+        teleportedA = false;
 
         if (input.x != 0) {
             Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
