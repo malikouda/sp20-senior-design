@@ -1920,10 +1920,10 @@ MonoBehaviour:
   checkpoint: {fileID: 0}
   next: 0
   levelMusic:
+  - {fileID: 8300000, guid: df960c13d79da4a93af9e2c50393fc19, type: 3}
   - {fileID: 8300000, guid: 454662c3dd570402abad2312ce677f9f, type: 3}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
-  - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
-  - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
+  - {fileID: 8300000, guid: 7f4f10794a4674a269c26b0bf6981cf3, type: 3}
   music: {fileID: 2001615012}
   musicSlider: {fileID: 1747831657}
   fx: {fileID: 589980458}
