@@ -51,6 +51,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
+        gm = FindObjectOfType<GameManager>();
         controller = GetComponent<Controller2D>();
         lr = GetComponent<LineRenderer>();
         lr.material = lineMaterial;
@@ -66,7 +67,6 @@ public class Player : MonoBehaviour {
         portalB = Instantiate(portalB);
         portalA.SetActive(false);
         portalB.SetActive(false);
-        gm = FindObjectOfType<GameManager>();
     }
 
     private void Update() {
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
-        if (hit) {
+        if (hit && hit.collider.tag != "noPortal") {
             lr.startColor = lr.endColor = shotA ? Color.blue : Color.yellow;
             lr.startWidth = .03f;
             lr.SetPosition(0, pos);
@@ -132,7 +132,6 @@ public class Player : MonoBehaviour {
         }
 
         if (teleportedA) {
-            print(normalB);
             transform.position = portalB.transform.position;
             if (normalB.x == 0 && normalB.y != 0) {
                 velocity.y *= -normalB.y;
@@ -144,7 +143,6 @@ public class Player : MonoBehaviour {
         }
 
         if (teleportedB) {
-            print(normalA);
             transform.position = portalA.transform.position;
             if (normalA.x == 0 && normalA.y != 0) {
                 velocity.y *= -normalA.y;
@@ -194,7 +192,9 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "ResetLevel") {
-            transform.position = gm.checkpoint.position;
+            if (gm) {
+                transform.position = gm.checkpoint.position;
+            }
             portalA.SetActive(false);
             portalB.SetActive(false);
             shotA = false;
