@@ -17,6 +17,7 @@ TagManager:
   - Origin
   - gloves
   - noPortal
+  - pickup
   layers:
   - Default
   - TransparentFX

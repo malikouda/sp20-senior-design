@@ -25,6 +25,8 @@ public class Player : MonoBehaviour {
     private Vector2 normalA;
     private Vector2 normalB;
     private bool hasPortal;
+    private bool canExitLevel;
+    private int numPickups = 3;
 
     public float maxVelocity = 30;
     [Range(1, 10)]
@@ -73,6 +75,14 @@ public class Player : MonoBehaviour {
         } else {
             hasPortal = true;
         }
+
+        if (gm && gm.currentLevel == 2) {
+            canExitLevel = false;
+            numPickups = 3;
+        } else {
+            canExitLevel = true;
+            numPickups = 0;
+        }
     }
 
     private void Update() {
@@ -87,7 +97,7 @@ public class Player : MonoBehaviour {
             lr.SetPosition(1, hit.point);
 
             if (Input.GetMouseButtonDown(0) && !shotA) {
-                portalA.transform.position = hit.point + hit.normal * .75f;
+                portalA.transform.position = hit.point + hit.normal * .70f;
                 portalA.SetActive(true);
                 normalA = hit.normal;
                 shotA = true;
@@ -96,7 +106,7 @@ public class Player : MonoBehaviour {
                 }
                 
             } else if (Input.GetMouseButtonDown(0) && shotA) {
-                portalB.transform.position = hit.point + hit.normal * .75f;
+                portalB.transform.position = hit.point + hit.normal * .70f;
                 portalB.SetActive(true);
                 normalB = hit.normal;
                 shotA = false;
@@ -193,7 +203,7 @@ public class Player : MonoBehaviour {
             }
         }
 
-        if (collision.tag == "NextLevel") {
+        if (collision.tag == "NextLevel" && canExitLevel) {
             gm.nextLevel = true;
         }
 
@@ -216,6 +226,14 @@ public class Player : MonoBehaviour {
         if (collision.tag == "gloves") {
             Destroy(collision.gameObject);
             hasPortal = true;
+        }
+
+        if (collision.tag == "pickup") {
+            Destroy(collision.gameObject);
+            numPickups--;
+            if (numPickups == 0) {
+                canExitLevel = true;
+            }
         }
     }
 
