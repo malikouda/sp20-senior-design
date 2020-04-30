@@ -1419,7 +1419,7 @@ GameObject:
   - component: {fileID: 576497023}
   m_Layer: 0
   m_Name: GloveObj
-  m_TagString: Untagged
+  m_TagString: gloves
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
