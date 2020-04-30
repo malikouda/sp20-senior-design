@@ -212,6 +212,11 @@ public class Player : MonoBehaviour {
         if (collision.tag == "Checkpoint" || collision.tag == "Origin") {
             gm.checkpoint = collision.transform;
         }
+
+        if (collision.tag == "gloves") {
+            Destroy(collision.gameObject);
+            hasPortal = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
@@ -220,15 +225,6 @@ public class Player : MonoBehaviour {
                 inA = false;
             } else if (collision.gameObject == portalB) {
                 inB = false;
-            }
-        }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision) {
-        if (collision.tag == "gloves") {
-            if (Input.GetKeyDown(KeyCode.E)) {
-                Destroy(collision.gameObject);
-                hasPortal = true;
             }
         }
     }
