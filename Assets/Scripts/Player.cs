@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Controller2D))]
 [RequireComponent(typeof(LineRenderer))]
@@ -25,6 +24,7 @@ public class Player : MonoBehaviour {
     private GameManager gm;
     private Vector2 normalA;
     private Vector2 normalB;
+    private bool hasPortal;
 
     public float maxVelocity = 30;
     [Range(1, 10)]
@@ -67,6 +67,12 @@ public class Player : MonoBehaviour {
         portalB = Instantiate(portalB);
         portalA.SetActive(false);
         portalB.SetActive(false);
+
+        if (gm && gm.currentLevel == 1) {
+            hasPortal = false;
+        } else {
+            hasPortal = true;
+        }
     }
 
     private void Update() {
@@ -74,7 +80,7 @@ public class Player : MonoBehaviour {
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 pos = new Vector2(transform.position.x, transform.position.y);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
-        if (hit && hit.collider.tag != "noPortal") {
+        if (hit && hit.collider.tag != "noPortal" && hasPortal) {
             lr.startColor = lr.endColor = shotA ? Color.blue : Color.yellow;
             lr.startWidth = .03f;
             lr.SetPosition(0, pos);
@@ -100,7 +106,7 @@ public class Player : MonoBehaviour {
                 }
             }
 
-        } else {
+        } else if (hasPortal) {
             lr.startColor = lr.endColor = Color.white;
             lr.SetPosition(0, pos);
             lr.SetPosition(1, ((mousePosition - pos).normalized * 5) + pos);
@@ -214,6 +220,15 @@ public class Player : MonoBehaviour {
                 inA = false;
             } else if (collision.gameObject == portalB) {
                 inB = false;
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision) {
+        if (collision.tag == "gloves") {
+            if (Input.GetKeyDown(KeyCode.E)) {
+                Destroy(collision.gameObject);
+                hasPortal = true;
             }
         }
     }

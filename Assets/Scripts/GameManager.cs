@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
 
-    private int currentLevel = 0;
+    [HideInInspector]
+    public int currentLevel = 0;
 
     public int numLevels;
 
