@@ -180,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b0982b00f3f5f0439d2cbb4dccc04c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxVelocity: 30
   jumpHeight: 2
   timeToJumpApex: 0.4
   moveSpeed: 4
@@ -195,7 +196,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d1ab3d2cbd6964844a5194461e574c9c, type: 3}
   - {fileID: 8300000, guid: fa060643889c34d748f4598bc21a5c61, type: 3}
   - {fileID: 8300000, guid: 3028b27b996514ddea300dc9c9fc00fb, type: 3}
-  - {fileID: 8300000, guid: 4ecf53ff4bee046c18e254cc9be4acef, type: 3}
+  - {fileID: 8300000, guid: 60ae64e8bc80149119b4d94abea3d428, type: 3}
 --- !u!50 &5955540838293966759
 Rigidbody2D:
   serializedVersion: 4

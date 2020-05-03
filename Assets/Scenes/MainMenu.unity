@@ -1916,11 +1916,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a8cd95e044b1b43952b6f4e3516e7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentLevel: 0
   numLevels: 4
   checkpoint: {fileID: 0}
   next: 0
   levelMusic:
-  - {fileID: 8300000, guid: df960c13d79da4a93af9e2c50393fc19, type: 3}
+  - {fileID: 8300000, guid: dc53a938d7a5f4cf2bdc2579966b44f8, type: 3}
   - {fileID: 8300000, guid: 454662c3dd570402abad2312ce677f9f, type: 3}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
   - {fileID: 8300000, guid: 7f4f10794a4674a269c26b0bf6981cf3, type: 3}
