@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour {
 
     bool destroy = false;
 
+    public GameObject options;
+
     public void Start() {
         DontDestroyOnLoad(gameObject);
 
@@ -95,6 +97,15 @@ public class GameManager : MonoBehaviour {
 
     public void ChangeFXVolume() {
         fx.volume = fxSlider.value;
+    }
+
+    public void ExitToMainMenu() {
+        options.SetActive(false);
+        if (currentLevel != 0) {
+            currentLevel = numLevels - 1;
+            nextLevel = true;
+          
+        }
     }
 
     IEnumerator FadeMusic(AudioSource audioSource, float duration, float targetVolume) {
