@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 
     public GameObject options;
 
-    public void Start() {
+    private void Start() {
         DontDestroyOnLoad(gameObject);
 
         if (levelMusic[currentLevel]) {
@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    public void Update() {
+    private void Update() {
         if (next) {
             next = false;
             nextLevel = true;

@@ -70,13 +70,13 @@ public class Player : MonoBehaviour {
         portalA.SetActive(false);
         portalB.SetActive(false);
 
-        if (gm && gm.currentLevel == 1) {
+        if (gm && gm.currentLevel == 2) {
             hasPortal = false;
         } else {
             hasPortal = true;
         }
 
-        if (gm && gm.currentLevel == 2) {
+        if (gm && gm.currentLevel == 4) {
             canExitLevel = false;
             numPickups = 3;
         } else {

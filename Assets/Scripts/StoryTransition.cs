@@ -8,15 +8,23 @@ public class StoryTransition : MonoBehaviour {
 
     GameManager gm;
 
-    public void Start() {
+    private void Start() {
         gm = FindObjectOfType<GameManager>();
         if (gm) {
             StartCoroutine(WaitTime(length));
         }
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            if (gm) {
+                gm.nextLevel = true;
+            }
+        }
+    }
+
     public IEnumerator WaitTime(float length) {
         yield return new WaitForSecondsRealtime(length);
-        gm.NextLevel();
+        gm.nextLevel = true;
     }
 }
