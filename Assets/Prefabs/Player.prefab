@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 312811762988448590}
   - component: {fileID: 5118397285192237095}
-  - component: {fileID: 5955540838293966758}
   - component: {fileID: 5955540838293966752}
   - component: {fileID: 5955540838293966753}
   - component: {fileID: 5955540838293966755}
@@ -89,21 +88,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5955540838293966758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5955540838293966757}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90e8494c6bc4d4eaa86b90dc5f66d537, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  astroButton: {fileID: 0}
-  rocketButton: {fileID: 0}
-  consoleButton: {fileID: 0}
 --- !u!61 &5955540838293966752
 BoxCollider2D:
   m_ObjectHideFlags: 0
