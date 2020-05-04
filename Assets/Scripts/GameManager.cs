@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour {
     [HideInInspector]
     public bool nextLevel = false;
 
+    bool destroy = false;
+
     public void Start() {
         DontDestroyOnLoad(gameObject);
 
@@ -50,6 +52,10 @@ public class GameManager : MonoBehaviour {
             StartCoroutine(FadeScene());
         }
 
+        if (destroy) {
+            Destroy(this.gameObject);
+        }
+
     }
 
     public void StartButton() {
@@ -64,6 +70,7 @@ public class GameManager : MonoBehaviour {
 
         if (currentLevel >= numLevels - 1) {
             currentLevel = 0;
+            destroy = true;
         } else {
             currentLevel++;
         }
