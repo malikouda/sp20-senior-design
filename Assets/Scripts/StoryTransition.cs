@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StoryTransition : MonoBehaviour {
 
-    public float length;
+    public float length = 10;
 
     GameManager gm;
 
