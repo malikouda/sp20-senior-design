@@ -5764,7 +5764,7 @@ PrefabInstance:
         type: 3}
       propertyPath: sounds.Array.data[3]
       value: 
-      objectReference: {fileID: 8300000, guid: 4ecf53ff4bee046c18e254cc9be4acef, type: 3}
+      objectReference: {fileID: 8300000, guid: 60ae64e8bc80149119b4d94abea3d428, type: 3}
     - target: {fileID: 8595130367250297974, guid: 62e1af2c064ddd548b9a2cb10c148572,
         type: 3}
       propertyPath: m_Offset.x

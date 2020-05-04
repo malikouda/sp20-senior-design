@@ -1917,14 +1917,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentLevel: 0
-  numLevels: 4
+  numLevels: 8
   checkpoint: {fileID: 0}
   next: 0
   levelMusic:
   - {fileID: 8300000, guid: dc53a938d7a5f4cf2bdc2579966b44f8, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 454662c3dd570402abad2312ce677f9f, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 019a9758e89eb4ece8261dcca21a3cc2, type: 3}
+  - {fileID: 0}
   - {fileID: 8300000, guid: 7f4f10794a4674a269c26b0bf6981cf3, type: 3}
+  - {fileID: 0}
   music: {fileID: 2001615012}
   musicSlider: {fileID: 1747831657}
   fx: {fileID: 589980458}

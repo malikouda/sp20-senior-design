@@ -78,6 +78,8 @@ public class GameManager : MonoBehaviour {
         if (levelMusic[currentLevel]) {
             music.clip = levelMusic[currentLevel];
             music.Play();
+        } else {
+            music.Stop();
         }
 
         SceneManager.LoadScene(currentLevel);
