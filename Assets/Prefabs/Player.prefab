@@ -21,7 +21,7 @@ GameObject:
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &312811762988448590
 Transform:
@@ -181,6 +181,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fa060643889c34d748f4598bc21a5c61, type: 3}
   - {fileID: 8300000, guid: 3028b27b996514ddea300dc9c9fc00fb, type: 3}
   - {fileID: 8300000, guid: 60ae64e8bc80149119b4d94abea3d428, type: 3}
+  - {fileID: 8300000, guid: e418d5e11780f49d78abd6c6a027fa54, type: 3}
+  - {fileID: 8300000, guid: ee5da8d99aa3f44839372f1739ee685c, type: 3}
+  - {fileID: 8300000, guid: 6ba2811a3451f443a92964c3caf30761, type: 3}
 --- !u!50 &5955540838293966759
 Rigidbody2D:
   serializedVersion: 4

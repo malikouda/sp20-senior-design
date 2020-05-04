@@ -27,6 +27,8 @@ public class Player : MonoBehaviour {
     private bool hasPortal;
     private bool canExitLevel;
     private int numPickups = 3;
+    private int checkpointNum = 0;
+    private GameObject lastCheckpoint = null;
 
     public float maxVelocity = 30;
     [Range(1, 10)]
@@ -72,8 +74,12 @@ public class Player : MonoBehaviour {
 
         if (gm && gm.currentLevel == 2) {
             hasPortal = false;
+            anim.SetLayerWeight(0, 1);
+            anim.SetLayerWeight(1, 0);
         } else {
             hasPortal = true;
+            anim.SetLayerWeight(0, 0);
+            anim.SetLayerWeight(1, 1);
         }
 
         if (gm && gm.currentLevel == 4) {
@@ -205,9 +211,11 @@ public class Player : MonoBehaviour {
 
         if (collision.tag == "NextLevel" && canExitLevel) {
             gm.nextLevel = true;
+            checkpointNum = 0;
         }
 
         if (collision.tag == "ResetLevel") {
+            checkpointNum = 0;
             if (gm) {
                 transform.position = gm.checkpoint.position;
             }
@@ -219,6 +227,19 @@ public class Player : MonoBehaviour {
             inB = false;
         }
 
+        if (collision.tag == "Checkpoint") {
+            if (gm) {
+                if (lastCheckpoint != collision.gameObject) {
+                    gm.PlaySound(sounds[(checkpointNum % 3) + 4]);
+                }
+            }
+
+            if (lastCheckpoint == null || lastCheckpoint != collision.gameObject) {
+                lastCheckpoint = collision.gameObject;
+                checkpointNum++;
+            }
+        }
+
         if (collision.tag == "Checkpoint" || collision.tag == "Origin") {
             gm.checkpoint = collision.transform;
         }
@@ -226,6 +247,8 @@ public class Player : MonoBehaviour {
         if (collision.tag == "gloves") {
             Destroy(collision.gameObject);
             hasPortal = true;
+            anim.SetLayerWeight(0, 0);
+            anim.SetLayerWeight(1, 1);
         }
 
         if (collision.tag == "pickup") {
