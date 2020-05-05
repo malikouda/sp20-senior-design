@@ -46,6 +46,8 @@ public class Player : MonoBehaviour {
     public LayerMask collisionMask;
     public Material lineMaterial;
     public AudioClip[] sounds;
+    [HideInInspector]
+    public bool active = true;
 
     [HideInInspector]
     public Vector2 input {
@@ -92,109 +94,120 @@ public class Player : MonoBehaviour {
     }
 
     private void Update() {
+        if (active) {
+            if (!lr.enabled) {
+                lr.enabled = true;
+            }
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 pos = new Vector2(transform.position.x, transform.position.y);
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
+            if (hit && hit.collider.tag != "noPortal" && hasPortal) {
+                lr.startColor = lr.endColor = shotA ? Color.blue : Color.yellow;
+                lr.startWidth = .03f;
+                lr.SetPosition(0, pos);
+                lr.SetPosition(1, hit.point);
 
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 pos = new Vector2(transform.position.x, transform.position.y);
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, mousePosition - pos, 5f, collisionMask);
-        if (hit && hit.collider.tag != "noPortal" && hasPortal) {
-            lr.startColor = lr.endColor = shotA ? Color.blue : Color.yellow;
-            lr.startWidth = .03f;
-            lr.SetPosition(0, pos);
-            lr.SetPosition(1, hit.point);
+                if (Input.GetMouseButtonDown(0) && !shotA) {
+                    portalA.transform.position = hit.point + hit.normal * .70f;
+                    portalA.SetActive(true);
+                    normalA = hit.normal;
+                    shotA = true;
+                    if (gm) {
+                        gm.PlaySound(sounds[1]);
+                    }
 
-            if (Input.GetMouseButtonDown(0) && !shotA) {
-                portalA.transform.position = hit.point + hit.normal * .70f;
-                portalA.SetActive(true);
-                normalA = hit.normal;
-                shotA = true;
-                if (gm) {
-                   gm.PlaySound(sounds[1]);
+                } else if (Input.GetMouseButtonDown(0) && shotA) {
+                    portalB.transform.position = hit.point + hit.normal * .70f;
+                    portalB.SetActive(true);
+                    normalB = hit.normal;
+                    shotA = false;
+                    portalsActive = true;
+                    if (gm) {
+                        gm.PlaySound(sounds[2]);
+                    }
                 }
-                
-            } else if (Input.GetMouseButtonDown(0) && shotA) {
-                portalB.transform.position = hit.point + hit.normal * .70f;
-                portalB.SetActive(true);
-                normalB = hit.normal;
+
+            } else if (hasPortal) {
+                lr.startColor = lr.endColor = Color.white;
+                lr.SetPosition(0, pos);
+                lr.SetPosition(1, ((mousePosition - pos).normalized * 5) + pos);
+            }
+
+            if (Input.GetKeyDown(KeyCode.R) && (portalA.activeSelf || portalB.activeSelf)) {
+                portalA.SetActive(false);
+                portalB.SetActive(false);
                 shotA = false;
-                portalsActive = true;
+                portalsActive = false;
+                inA = false;
+                inB = false;
                 if (gm) {
-                    gm.PlaySound(sounds[2]);
+                    gm.PlaySound(sounds[3]);
                 }
             }
 
-        } else if (hasPortal) {
-            lr.startColor = lr.endColor = Color.white;
-            lr.SetPosition(0, pos);
-            lr.SetPosition(1, ((mousePosition - pos).normalized * 5) + pos);
-        }
-
-        if (Input.GetKeyDown(KeyCode.R) && (portalA.activeSelf || portalB.activeSelf)) {
-            portalA.SetActive(false);
-            portalB.SetActive(false);
-            shotA = false;
-            portalsActive = false;
-            inA = false;
-            inB = false;
-            if (gm) {
-                gm.PlaySound(sounds[3]);
+            if (controller.collisions.above || controller.collisions.below) {
+                velocity.y = 0;
+                anim.SetBool("isJumping", false);
             }
-        }
 
-        if (controller.collisions.above || controller.collisions.below) {
-            velocity.y = 0;
-            anim.SetBool("isJumping", false);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
-            velocity.y = jumpVelocity;
-            anim.SetBool("isJumping", true);
-            if (gm) {
-                gm.PlaySound(sounds[0]);
+            if (Input.GetKeyDown(KeyCode.Space) && controller.collisions.below) {
+                velocity.y = jumpVelocity;
+                anim.SetBool("isJumping", true);
+                if (gm) {
+                    gm.PlaySound(sounds[0]);
+                }
             }
-        }
 
-        if (teleportedA) {
-            transform.position = portalB.transform.position;
-            if (normalB.x == 0 && normalB.y != 0) {
-                velocity.y *= -normalB.y;
-            } else if (normalB.y == 0 && normalB.x != 0) {
-                velocity.x *= -normalB.x;
+            if (teleportedA) {
+                transform.position = portalB.transform.position;
+                if (normalB.x == 0 && normalB.y != 0) {
+                    velocity.y *= -normalB.y;
+                } else if (normalB.y == 0 && normalB.x != 0) {
+                    velocity.x *= -normalB.x;
+                } else {
+                    velocity *= -normalB;
+                }
+            }
+
+            if (teleportedB) {
+                transform.position = portalA.transform.position;
+                if (normalA.x == 0 && normalA.y != 0) {
+                    velocity.y *= -normalA.y;
+                } else if (normalA.y == 0 && normalA.x != 0) {
+                    velocity.x *= -normalA.x;
+                } else {
+                    velocity *= -normalA;
+                }
+            }
+
+            velocity = Vector2.ClampMagnitude(velocity, 25);
+            float targetVelocityX = input.x * moveSpeed;
+
+            velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+
+            teleportedB = false;
+            teleportedA = false;
+
+            if (input.x != 0) {
+                Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
+                transform.localScale = newScale;
+
+                if (controller.collisions.below) {
+                    anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
+                    anim.SetBool("isWalking", true);
+                }
             } else {
-                velocity *= -normalB;
-            }
-        }
-
-        if (teleportedB) {
-            transform.position = portalA.transform.position;
-            if (normalA.x == 0 && normalA.y != 0) {
-                velocity.y *= -normalA.y;
-            } else if (normalA.y == 0 && normalA.x != 0) {
-                velocity.x *= -normalA.x;
-            } else {
-                velocity *= -normalA;
-            }
-        }
-
-        velocity = Vector2.ClampMagnitude(velocity, 25);
-        float targetVelocityX = input.x * moveSpeed;
-
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, controller.collisions.below ? accelerationTimeGrounded : accelerationTimeAirborne);
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-
-        teleportedB = false;
-        teleportedA = false;
-
-        if (input.x != 0) {
-            Vector3 newScale = new Vector3(Mathf.Sign(velocity.x) * scaleX, transform.localScale.y, transform.localScale.z);
-            transform.localScale = newScale;
-
-            if (controller.collisions.below) {
-                anim.SetFloat("speed", Mathf.Clamp(Mathf.Abs(velocity.x * input.x), 0, 1f));
-                anim.SetBool("isWalking", true);
+                anim.SetBool("isWalking", false);
             }
         } else {
+            lr.enabled = false;
             anim.SetBool("isWalking", false);
+            anim.SetBool("isJumping", false);
+            velocity.x = 0;
+            velocity.y += gravity * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
         }
     }
 
@@ -210,7 +223,9 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "NextLevel" && canExitLevel) {
-            gm.nextLevel = true;
+            if (gm) {
+                gm.nextLevel = true;
+            }
             checkpointNum = 0;
         }
 
@@ -241,7 +256,9 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "Checkpoint" || collision.tag == "Origin") {
-            gm.checkpoint = collision.transform;
+            if (gm) {
+                gm.checkpoint = collision.transform;
+            }
         }
 
         if (collision.tag == "gloves") {
@@ -252,6 +269,9 @@ public class Player : MonoBehaviour {
         }
 
         if (collision.tag == "pickup") {
+            if (gm) {
+                gm.PlaySound(sounds[7]);
+            }
             Destroy(collision.gameObject);
             numPickups--;
             if (numPickups == 0) {

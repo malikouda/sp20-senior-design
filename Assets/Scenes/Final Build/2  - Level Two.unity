@@ -668,7 +668,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -5716,7 +5716,7 @@ PrefabInstance:
     - target: {fileID: 8595130367250297972, guid: 62e1af2c064ddd548b9a2cb10c148572,
         type: 3}
       propertyPath: sounds.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8595130367250297972, guid: 62e1af2c064ddd548b9a2cb10c148572,
         type: 3}
@@ -5780,6 +5780,11 @@ PrefabInstance:
       propertyPath: sounds.Array.data[6]
       value: 
       objectReference: {fileID: 8300000, guid: 75cdb31489880472a8806ea1c2685f06, type: 3}
+    - target: {fileID: 8595130367250297972, guid: 62e1af2c064ddd548b9a2cb10c148572,
+        type: 3}
+      propertyPath: sounds.Array.data[7]
+      value: 
+      objectReference: {fileID: 8300000, guid: 7eb4deed89d6944bead3920e5a01a761, type: 3}
     - target: {fileID: 8595130367250297974, guid: 62e1af2c064ddd548b9a2cb10c148572,
         type: 3}
       propertyPath: m_Offset.x

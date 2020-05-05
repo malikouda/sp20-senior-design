@@ -16,7 +16,7 @@ public class StoryTransition : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Return)) {
             if (gm) {
                 gm.nextLevel = true;
             }
